@@ -18,23 +18,30 @@ data, plan, write and debug code, make charts, and build the page.
 3. Reflection report: written by the student alone. Never draft, outline, or edit it.
 
 ## Data
-- Source: https://github.com/jpwhite3/northwind-SQLite3 pinned at commit 4f56e7f.
-- Build the database the way that repo's `make build` does: run its `src/create.sql`,
-  then `src/update.sql`. Do this in Python with the built-in `sqlite3` module
-  (`src/build_db.py`), writing to `data/northwind.db`.
-- Expected result: 830 orders, 2,155 order lines, OrderDate 2016-07-04 to 2018-05-06.
-- Do NOT use that repo's prebuilt `dist/northwind.db`: it adds ~15k randomly generated orders.
+- Source: the course's public Google Sheet "Northwind Database", exported as xlsx from
+  https://docs.google.com/spreadsheets/d/1mD4Hn4NZdJlXMC4EJcSp27vg-_jbxUYJ95vQvMbSpVM/export?format=xlsx
+- Keep a snapshot in the repo at `data/northwind_source.xlsx` so results stay reproducible
+  even if the sheet changes. `src/build_db.py` downloads it only if the snapshot is missing,
+  loads every tab with pandas (needs `openpyxl`), and saves `data/northwind.db`.
+- `build_db.py` must check and fail loudly if these don't hold: 830 orders, 2,155 order
+  lines, 91 customers, 77 products, OrderDate 1996-07-04 to 1998-05-06.
+- Tabs (exact names): Categories, Customers, Employees, Orders Details, Orders, Shippers,
+  Product, Suppliers. No Regions/Territories tables exist.
+- `Product` has a `Price` column (current list price) and no `UnitPrice`. Ignore its leftover
+  exercise columns: Cheap, NewPrice, Cheap.1, IsCheap, Unnamed: 14, NewPrice.1.
+- Known quirk: orders 10248, 10249, 10260, 10808 have a CustomerID whose country differs
+  from ShipCountry. Keep the data as given, but mention it if it affects a result.
 
 ## Analysis rules
-- Revenue = `[Order Details].UnitPrice * Quantity * (1 - Discount)`.
-  Never use `Products.UnitPrice` for revenue (it differs on 658 order lines).
-- 2016 (Jul-Dec) and 2018 (Jan to May 6) are partial years. Never compare raw yearly
+- Revenue = `[Orders Details].UnitPrice * Quantity * (1 - Discount)`.
+  Never use `Product.Price` for revenue (it differs on 658 order lines).
+- 1996 (Jul-Dec) and 1998 (Jan to May 6) are partial years. Never compare raw yearly
   totals; use monthly series or same-period comparisons, and say so on the page.
 - 21 orders have no ShippedDate; handle them explicitly in any shipping analysis.
 - State assumptions and caveats; flag small sample sizes.
 
 ## Code rules
-- Python only. List dependencies in `requirements.txt`.
+- Python only. List dependencies in `requirements.txt` (including `openpyxl`).
 - One command reproduces everything: `python run_all.py`.
 - Every number on the webpage must be computed by the scripts and inserted by
   `src/build_site.py`. Never type numbers into the page by hand.

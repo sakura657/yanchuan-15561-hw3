@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Northwind Sales Review</title>
+<meta name="description" content="Where Northwind's markets are growing, how concentrated its revenue is, and where shipping slows down.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fcfcfb;--ink:#1f2a33;--ink-2:#55606a;--rule:#dde2e6;--accent:#2a78d6;
+--panel:#eef4fb;--code:#f1f2f0;color-scheme:light}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);
+font:1.0625rem/1.6 "Atkinson Hyperlegible",system-ui,sans-serif}
+main{max-width:46rem;margin:0 auto;padding:3rem 1rem 4rem}
+header{margin-bottom:3rem}
+h1{font-size:clamp(1.9rem,4.5vw,2.6rem);line-height:1.15;letter-spacing:-.015em;margin:0 0 .75rem}
+.dek{font-size:1.2rem;color:var(--ink-2);margin:0 0 2rem}
+.summary{border-top:3px solid var(--ink);padding-top:1rem}
+.summary h2{font-size:1rem;margin:0 0 .5rem}
+.summary ol{margin:0;padding-left:1.25rem}
+.summary li{margin:.5rem 0}
+.summary a{color:var(--ink);font-weight:700}
+section{border-top:1px solid var(--rule);padding-top:2.25rem;margin-top:3rem}
+.qnum{margin:0;color:var(--accent);font-weight:700}
+h2{font-size:1.6rem;line-height:1.25;margin:.25rem 0 1.25rem;letter-spacing:-.01em}
+h3{font-size:1.05rem;margin:1.75rem 0 .35rem}
+p{margin:0 0 .9rem}
+ul{padding-left:1.25rem}
+code{background:var(--code);padding:.05em .3em;border-radius:3px;font-size:.88em}
+.wide,figure{width:min(58rem,calc(100vw - 2rem));position:relative;left:50%;transform:translateX(-50%)}
+figure{margin:2rem 0 1rem;padding:0}
+figure img{display:block;width:100%;height:auto}
+figcaption{font-size:.9rem;color:var(--ink-2);padding:.5rem 0 0;max-width:46rem;margin:0 auto}
+.table-wrap{overflow-x:auto;margin:1rem 0 1.5rem}
+table{border-collapse:collapse;width:100%;font-size:.9rem;font-variant-numeric:tabular-nums}
+caption{text-align:left;font-weight:700;padding-bottom:.4rem}
+th,td{padding:.4rem .6rem;border-bottom:1px solid var(--rule);text-align:left;white-space:nowrap}
+thead th{color:var(--ink-2);font-weight:700;border-bottom:1.5px solid var(--ink-2)}
+.num{text-align:right}
+.ci{color:var(--ink-2);font-size:.85em}
+.answer{background:var(--panel);border-radius:6px;padding:.25rem 1.25rem .5rem;margin-top:2rem}
+.answer h3:first-child{margin-top:1rem}
+details{margin:1rem 0}
+summary{cursor:pointer;color:var(--accent);font-weight:700}
+summary:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.caveats li{margin:.35rem 0}
+footer{border-top:1px solid var(--rule);margin-top:3.5rem;padding-top:1.5rem;font-size:.95rem;color:var(--ink-2)}
+footer h2{font-size:1.1rem;color:var(--ink)}
+a{color:var(--accent)}
+</style>
+</head>
+<body>
+<main>
+<header>
+<h1>Northwind sales review: markets, concentration and shipping</h1>
+<p class="dek">Three questions for planning next year's sales and operations, answered from
+830 orders placed between July 4, 1996 and
+May 6, 1998.</p>
+
+<div class="summary">
+<h2>Summary</h2>
+<ol>
+<li><a href="#q1">Markets.</a> Revenue grew 75% between
+the two halves of the data. North America gained the most share of revenue
+(+3.6 pp), led by the USA;
+Western Europe lost the most (−3.2 pp).</li>
+<li><a href="#q2">Categories and concentration.</a> 52.9% of revenue
+comes from three categories, and 45.0% from just 10 customers.
+The top three customers alone bring in 25.2%.</li>
+<li><a href="#q3">Shipping.</a> The shippers are alike on typical speed but not on slow orders:
+Federal Shipping ships 90% of orders within 12 days. Orders promised in
+14 days are late far more often (17.6%) than the rest.</li>
+</ol>
+</div>
+</header>
+
+<section id="q1" aria-labelledby="q1-title">
+  <p class="qnum">Q1</p>
+  <h2 id="q1-title">Which customer markets are growing or declining, and where should sales efforts be focused?</h2>
+  <h3>Why it matters</h3>
+  <p>Sales time and marketing money are limited. Knowing which customer markets are taking a bigger slice of the business, and which are slipping, tells the sales team where extra effort is most likely to pay off and which markets need a closer look before they shrink further.</p>
+  <h3>Approach</h3>
+  <p>Revenue is <code>UnitPrice × Quantity × (1 − Discount)</code> from each order
+line, joined to the order and then to the customer. A market is the customer's country
+(<code>Customers.Country</code>), grouped into five regions.</p>
+<p>The data covers only part of 1996 and part of 1998, so
+calendar years can't be compared. Instead I split the data into two equal halves:
+<strong>P1 = Jul 1996–May 1997</strong> (307 orders) and
+<strong>P2 = Jun 1997–Apr 1998</strong> (509 orders). The last
+14 orders, placed after P2 ended and up to
+May 6, 1998, are left out.</p>
+<p>Because the whole company grew 75% between the
+halves, almost every market grew in dollars. So the headline measure is each market's
+<strong>change in share of company revenue</strong> (in percentage points, pp). Dollar growth is
+shown alongside. Countries are shown individually only if they had at least 10 orders in each
+half.</p>
+  <figure><img src="figures/q1_region_share.png" alt="Dot plot of each region&#x27;s share of company revenue in P1 and P2."><figcaption>Grey dot = P1 share, blue dot = P2 share. Labels give each region's revenue growth.</figcaption></figure><div class="table-wrap wide"><table><thead><tr><th scope="col">Region</th><th scope="col" class=num>Customers</th><th scope="col" class=num>Orders P1</th><th scope="col" class=num>Orders P2</th><th scope="col" class=num>Revenue P1</th><th scope="col" class=num>Revenue P2</th><th scope="col" class=num>Growth</th><th scope="col" class=num>Share P1</th><th scope="col" class=num>Share P2</th><th scope="col" class=num>Share change</th></tr></thead><tbody><tr><th scope="row">Western Europe</th><td class=num>36</td><td class=num>138</td><td class=num>212</td><td class=num>$229k</td><td class=num>$376k</td><td class=num>+64%</td><td class=num>50.6%</td><td class=num>47.4%</td><td class=num>−3.2 pp</td></tr><tr><th scope="row">North America</th><td class=num>16</td><td class=num>51</td><td class=num>98</td><td class=num>$95k</td><td class=num>$195k</td><td class=num>+105%</td><td class=num>20.9%</td><td class=num>24.5%</td><td class=num>+3.6 pp</td></tr><tr><th scope="row">Latin America</th><td class=num>21</td><td class=num>63</td><td class=num>106</td><td class=num>$72k</td><td class=num>$122k</td><td class=num>+69%</td><td class=num>15.9%</td><td class=num>15.4%</td><td class=num>−0.5 pp</td></tr><tr><th scope="row">Nordic</th><td class=num>7</td><td class=num>30</td><td class=num>53</td><td class=num>$42k</td><td class=num>$70k</td><td class=num>+64%</td><td class=num>9.3%</td><td class=num>8.8%</td><td class=num>−0.6 pp</td></tr><tr><th scope="row">Southern Europe</th><td class=num>9</td><td class=num>25</td><td class=num>40</td><td class=num>$15k</td><td class=num>$32k</td><td class=num>+115%</td><td class=num>3.3%</td><td class=num>4.0%</td><td class=num>+0.7 pp</td></tr></tbody></table></div><figure><img src="figures/q1_country_share_change.png" alt="Bar chart of change in revenue share by country."><figcaption>Countries with at least 10 orders in each half. The number in brackets is how many customers the country has.</figcaption></figure><details><summary>Country table</summary><div class="table-wrap wide"><table><thead><tr><th scope="col">Country</th><th scope="col" class=num>Customers</th><th scope="col" class=num>Orders P1</th><th scope="col" class=num>Orders P2</th><th scope="col" class=num>Revenue growth</th><th scope="col" class=num>Share change</th></tr></thead><tbody><tr><th scope="row">USA</th><td class=num>13</td><td class=num>39</td><td class=num>80</td><td class=num>+131%</td><td class=num>+5.1 pp</td></tr><tr><th scope="row">Sweden</th><td class=num>2</td><td class=num>12</td><td class=num>25</td><td class=num>+188%</td><td class=num>+2.0 pp</td></tr><tr><th scope="row">Brazil</th><td class=num>9</td><td class=num>27</td><td class=num>56</td><td class=num>+105%</td><td class=num>+1.3 pp</td></tr><tr><th scope="row">Germany</th><td class=num>11</td><td class=num>47</td><td class=num>71</td><td class=num>+81%</td><td class=num>+0.5 pp</td></tr><tr><th scope="row">UK</th><td class=num>7</td><td class=num>24</td><td class=num>32</td><td class=num>+63%</td><td class=num>−0.3 pp</td></tr><tr><th scope="row">Venezuela</th><td class=num>4</td><td class=num>18</td><td class=num>26</td><td class=num>+52%</td><td class=num>−0.6 pp</td></tr><tr><th scope="row">Finland</th><td class=num>2</td><td class=num>11</td><td class=num>12</td><td class=num>−15%</td><td class=num>−1.2 pp</td></tr><tr><th scope="row">Canada</th><td class=num>3</td><td class=num>12</td><td class=num>18</td><td class=num>+22%</td><td class=num>−1.5 pp</td></tr><tr><th scope="row">Austria</th><td class=num>2</td><td class=num>16</td><td class=num>23</td><td class=num>+47%</td><td class=num>−1.8 pp</td></tr><tr><th scope="row">Mexico</th><td class=num>5</td><td class=num>14</td><td class=num>12</td><td class=num>−31%</td><td class=num>−1.8 pp</td></tr><tr><th scope="row">France</th><td class=num>10</td><td class=num>30</td><td class=num>45</td><td class=num>+13%</td><td class=num>−3.0 pp</td></tr></tbody></table></div></details>
+  <div class="answer">
+    <h3>Main finding</h3>
+    <p>Revenue grew 75% from P1 to P2
+($453k to $794k). Measured by share,
+<strong>North America gained the most</strong>: 20.9% to
+24.5% (+3.6 pp), with revenue up
+105%. Western Europe is still the largest region at 47.4% of revenue but lost
+3.2 pp.</p>
+<p>By country, the USA gained the most share (+5.1 pp) and
+France lost the most (−3.0 pp, with revenue up only
+13%). Only Mexico and Finland had lower
+revenue in P2 than in P1.</p>
+    <h3>Business implication</h3>
+    <p>North America, and the USA in particular, is
+where demand is rising fastest, so it is the strongest case for extra sales capacity. The
+markets gaining share are USA, Sweden, Brazil and Germany. France and the
+countries where revenue fell (Mexico and Finland) need a customer-by-customer
+review to find out who is buying less, and why, before deciding whether to rebuild or cut
+effort there.</p>
+  </div>
+  <details class="caveats"><summary>Caveats and sample sizes</summary><ul><li>P1 and P2 are equal-length halves, not calendar years. Each holds one of every calendar month except that P1 includes a May and P2 a June.</li><li>Region groupings are my own judgment. Latin America: Argentina, Brazil, Mexico and Venezuela; Nordic: Denmark, Finland, Norway and Sweden; North America: Canada and USA; Southern Europe: Italy, Portugal and Spain; Western Europe: Austria, Belgium, France, Germany, Ireland, Poland, Switzerland and UK.</li><li>Austria, Finland and Sweden have at most 2 customers each, so their changes reflect individual accounts more than whole markets.</li><li>4 orders (10248, 10249, 10260, 10808) ship to a country different from the customer's own. Counting them by ship-to country instead moves any region's share by at most 0.84 pp and changes no region from gaining to losing.</li><li>Share of revenue depends on a few large orders in small markets, so a single big order can swing a country's result.</li></ul></details>
+</section>
+
+<section id="q2" aria-labelledby="q2-title">
+  <p class="qnum">Q2</p>
+  <h2 id="q2-title">Which product categories drive the most revenue, and how concentrated are sales?</h2>
+  <h3>Why it matters</h3>
+  <p>Knowing which categories bring in the money guides stock, purchasing and promotion decisions. Knowing how much revenue depends on a handful of customers measures risk: if a few accounts make up most of the business, losing one of them hurts, and those accounts deserve extra attention.</p>
+  <h3>Approach</h3>
+  <p>Order lines are joined to products and then to categories; revenue is
+<code>UnitPrice × Quantity × (1 − Discount)</code>. The window is the whole dataset,
+July 4, 1996 to May 6, 1998. No years are compared here, so
+the partial years don't distort the totals. As a stability check, category shares are also
+compared between the two halves used in Q1 (P1 = Jul 1996–May 1997, P2 =
+Jun 1997–Apr 1998).</p>
+<p>For concentration, the 89 customers with at least one order are ranked by total
+revenue. The Pareto curve shows what share of revenue the top X% of customers bring in. The
+summary numbers are the share held by the top 10 customers and by the top
+20% (18 customers).</p>
+  <figure><img src="figures/q2_category_revenue.png" alt="Bar chart of revenue by product category."><figcaption>Revenue over the whole period, net of discounts. Labels give each category's share of the total.</figcaption></figure><div class="table-wrap wide"><table><thead><tr><th scope="col">Category</th><th scope="col" class=num>Products</th><th scope="col" class=num>Revenue</th><th scope="col" class=num>Share</th><th scope="col" class=num>Share P1</th><th scope="col" class=num>Share P2</th><th scope="col" class=num>Share change</th></tr></thead><tbody><tr><th scope="row">Beverages</th><td class=num>12</td><td class=num>$268k</td><td class=num>21.2%</td><td class=num>23.3%</td><td class=num>19.9%</td><td class=num>−3.5 pp</td></tr><tr><th scope="row">Dairy Products</th><td class=num>10</td><td class=num>$235k</td><td class=num>18.5%</td><td class=num>18.0%</td><td class=num>19.2%</td><td class=num>+1.2 pp</td></tr><tr><th scope="row">Confections</th><td class=num>13</td><td class=num>$167k</td><td class=num>13.2%</td><td class=num>15.1%</td><td class=num>12.2%</td><td class=num>−2.9 pp</td></tr><tr><th scope="row">Meat/Poultry</th><td class=num>6</td><td class=num>$163k</td><td class=num>12.9%</td><td class=num>12.4%</td><td class=num>13.0%</td><td class=num>+0.6 pp</td></tr><tr><th scope="row">Seafood</th><td class=num>12</td><td class=num>$131k</td><td class=num>10.4%</td><td class=num>8.1%</td><td class=num>11.7%</td><td class=num>+3.6 pp</td></tr><tr><th scope="row">Condiments</th><td class=num>12</td><td class=num>$106k</td><td class=num>8.4%</td><td class=num>9.3%</td><td class=num>8.0%</td><td class=num>−1.3 pp</td></tr><tr><th scope="row">Produce</th><td class=num>5</td><td class=num>$100k</td><td class=num>7.9%</td><td class=num>7.0%</td><td class=num>8.4%</td><td class=num>+1.4 pp</td></tr><tr><th scope="row">Grains/Cereals</th><td class=num>7</td><td class=num>$96k</td><td class=num>7.6%</td><td class=num>6.8%</td><td class=num>7.6%</td><td class=num>+0.8 pp</td></tr></tbody></table></div><figure><img src="figures/q2_customer_pareto.png" alt="Pareto curve of cumulative revenue share against cumulative share of customers."><figcaption>The further the blue curve sits above the grey line, the more revenue depends on a few customers.</figcaption></figure><details><summary>Top customers table</summary><div class="table-wrap wide"><table><thead><tr><th scope="col">Rank</th><th scope="col">Customer</th><th scope="col">Country</th><th scope="col" class=num>Revenue</th><th scope="col" class=num>Orders</th><th scope="col" class=num>Share</th></tr></thead><tbody><tr><th scope="row">1</th><td>QUICK-Stop</td><td>Germany</td><td class=num>$110k</td><td class=num>28</td><td class=num>8.7%</td></tr><tr><th scope="row">2</th><td>Ernst Handel</td><td>Austria</td><td class=num>$105k</td><td class=num>30</td><td class=num>8.3%</td></tr><tr><th scope="row">3</th><td>Save-a-lot Markets</td><td>USA</td><td class=num>$104k</td><td class=num>31</td><td class=num>8.2%</td></tr><tr><th scope="row">4</th><td>Rattlesnake Canyon Grocery</td><td>USA</td><td class=num>$51k</td><td class=num>18</td><td class=num>4.0%</td></tr><tr><th scope="row">5</th><td>Hungry Owl All-Night Grocers</td><td>Ireland</td><td class=num>$50k</td><td class=num>19</td><td class=num>3.9%</td></tr><tr><th scope="row">6</th><td>Hanari Carnes</td><td>Brazil</td><td class=num>$33k</td><td class=num>14</td><td class=num>2.6%</td></tr><tr><th scope="row">7</th><td>Königlich Essen</td><td>Germany</td><td class=num>$31k</td><td class=num>14</td><td class=num>2.4%</td></tr><tr><th scope="row">8</th><td>Folk och fä HB</td><td>Sweden</td><td class=num>$30k</td><td class=num>19</td><td class=num>2.3%</td></tr><tr><th scope="row">9</th><td>Mère Paillarde</td><td>Canada</td><td class=num>$29k</td><td class=num>13</td><td class=num>2.3%</td></tr><tr><th scope="row">10</th><td>White Clover Markets</td><td>USA</td><td class=num>$27k</td><td class=num>14</td><td class=num>2.2%</td></tr></tbody></table></div></details>
+  <div class="answer">
+    <h3>Main finding</h3>
+    <p>Beverages, Dairy Products and Confections together bring in 52.9%
+of revenue, and Beverages alone 21.2%. The mix is
+shifting: between the halves Beverages lost 3.5 pp
+of share and Seafood gained +3.6 pp.</p>
+<p>Customer revenue is heavily concentrated. The top 10 of 89 customers bring in
+<strong>45.0%</strong> of revenue and the top 20% bring in
+60.1%. Just 13 customers make up half of all
+revenue, while the smallest 44 together make up
+11.5%. The three largest, QUICK-Stop, Ernst Handel and Save-a-lot Markets,
+each account for 8.2% to 8.7%.</p>
+    <h3>Business implication</h3>
+    <p>Losing any one of the three largest customers would remove roughly
+8% to 9% of revenue, so these accounts
+justify a named account manager and early warning when their order frequency drops. On the
+product side, stock and promotion priority belongs with Beverages, Dairy Products and Confections, while the falling
+share of Beverages is worth checking for pricing or competition problems.</p>
+  </div>
+  <details class="caveats"><summary>Caveats and sample sizes</summary><ul><li>Totals cover the whole period, so customers who started buying later look smaller. 7 customers placed their first order after P1.</li><li>2 customers in the database never ordered and are excluded from the 89.</li><li>Revenue is net of discounts and excludes freight.</li></ul></details>
+</section>
+
+<section id="q3" aria-labelledby="q3-title">
+  <p class="qnum">Q3</p>
+  <h2 id="q3-title">Where are the largest shipping delays, and which operational areas need improvement?</h2>
+  <h3>Why it matters</h3>
+  <p>Late or slow shipments cost repeat business and lead to rush freight and complaints. Knowing whether delays come from a particular carrier or from how delivery dates are promised tells operations which lever to pull.</p>
+  <h3>Approach</h3>
+  <p>Each order is joined to its shipper (<code>Orders.ShipVia → Shippers</code>).
+Two measures are used:</p>
+<ul>
+<li><strong>Days to ship</strong> = <code>ShippedDate − OrderDate</code> in calendar days
+(headline). I report the median, the 90th percentile, and the share of orders taking more than
+14 days.</li>
+<li><strong>Late rate</strong> = share of orders shipped after their <code>RequiredDate</code>.</li>
+</ul>
+<p>All 809 shipped orders are used. The 21 orders with
+no ship date (placed April 8, 1998 to
+May 6, 1998) are excluded from timing and listed separately as
+<em>open</em>. 95% ranges come from a Wilson interval for shares and from a bootstrap for the
+median.</p>
+  <figure><img src="figures/q3_days_to_ship_box.png" alt="Box plot of days to ship for each shipper."><figcaption>Shipped orders only. The red line marks the most common promised lead time.</figcaption></figure><div class="table-wrap wide"><table><thead><tr><th scope="col">Shipper</th><th scope="col" class=num>Shipped</th><th scope="col" class=num>Open</th><th scope="col" class=num>Median days</th><th scope="col" class=num>90th pct days</th><th scope="col" class=num>Over 14 days (95% range)</th><th scope="col" class=num>Late (95% range)</th><th scope="col" class=num>Late orders</th></tr></thead><tbody><tr><th scope="row">Federal Shipping</th><td class=num>249</td><td class=num>6</td><td class=num>6</td><td class=num>12</td><td class=num>7.6% <span class=ci>(4.9–11.6)</span></td><td class=num>3.6% <span class=ci>(1.9–6.7)</span></td><td class=num>9</td></tr><tr><th scope="row">Speedy Express</th><td class=num>245</td><td class=num>4</td><td class=num>7</td><td class=num>18</td><td class=num>12.2% <span class=ci>(8.7–16.9)</span></td><td class=num>4.9% <span class=ci>(2.8–8.4)</span></td><td class=num>12</td></tr><tr><th scope="row">United Package</th><td class=num>315</td><td class=num>11</td><td class=num>7</td><td class=num>21.6</td><td class=num>14.9% <span class=ci>(11.4–19.3)</span></td><td class=num>5.1% <span class=ci>(3.2–8.1)</span></td><td class=num>16</td></tr></tbody></table></div><div class="table-wrap wide"><table><caption>Late rate by promised lead time (RequiredDate − OrderDate)</caption><thead><tr><th scope="col">Promised lead time</th><th scope="col" class=num>Shipped</th><th scope="col" class=num>Late</th><th scope="col" class=num>Late rate</th></tr></thead><tbody><tr><th scope="row">14 days</th><td class=num>68</td><td class=num>12</td><td class=num>17.6%</td></tr><tr><th scope="row">28 days</th><td class=num>682</td><td class=num>25</td><td class=num>3.7%</td></tr><tr><th scope="row">42 days</th><td class=num>59</td><td class=num>0</td><td class=num>0.0%</td></tr></tbody></table></div>
+  <div class="answer">
+    <h3>Main finding</h3>
+    <p>Half of all orders ship within 7 days and 90% within
+18 days. Overall, 4.6% (37 of
+809) shipped after the required date. The shippers are alike on typical
+speed (medians 6 to 7 days) but differ in their slow tail:
+<strong>Federal Shipping ships 90% of orders within 12 days, against
+21.6 days for United Package</strong>. Only 7.6% of its orders take
+more than 14 days, against 14.9%.</p>
+<p>Late rates (Speedy Express 4.9%; United Package 5.1%; Federal Shipping 3.6%)
+fall within each other’s 95% ranges, so the data cannot separate the shippers on lateness. The promised lead
+time matters more: 17.6% of 14-day orders shipped late,
+against 3.7% of 28-day orders.</p>
+    <h3>Business implication</h3>
+    <p>The problem is the slow tail and tight promises, not average speed.
+Routing time-sensitive orders to Federal Shipping and asking United Package about its slowest
+shipments could cut the long waits. Promising a 14-day lead time should be checked
+against what the warehouse can actually ship in time. The gap in slow shipments is borderline (the 95% ranges just overlap), so treat it as a lead worth testing, not proof. A trial that routes
+urgent orders to Federal Shipping and tracks the results would settle it.</p>
+  </div>
+  <details class="caveats"><summary>Caveats and sample sizes</summary><ul><li>Late counts per shipper are small (9 to 16), which is why the late-rate ranges are wide.</li><li>ShippedDate is when the order left the warehouse, not when the customer received it.</li><li>None of the 21 open orders was past its required date when the data ends (0 overdue), but some may still turn late.</li><li>Days are calendar days; weekends and holidays are not removed.</li></ul></details>
+</section>
+
+<footer>
+<h2>Data and method</h2>
+<p>Source: the course's Northwind Google Sheet, saved in the repository as a snapshot. It holds
+830 orders, 2,155 order lines, 91 customers in
+21 countries, 77 products in 8 categories
+and 3 shippers. Orders run from July 4, 1996 to
+May 6, 1998, so the first and last years are partial; no raw yearly totals are
+compared anywhere on this page.</p>
+<p>Revenue always uses the price on the order line, not the product's current list price. The
+two differ on 658 order lines because prices rose during
+the period. 21 orders had not shipped when the data ends, and
+4 orders ship to a different country from
+the customer's own; each is handled where it matters above.</p>
+<p>Every number, chart and table on this page is produced by the Python code in
+<a href="https://github.com/sakura657/yanchuan-15561-hw3">the project repository</a>. Run <code>python run_all.py</code> to rebuild
+it from the data snapshot.</p>
+</footer>
+</main>
+</body>
+</html>

@@ -1,0 +1,200 @@
+{
+  "window": "1996-07-04 to 1998-05-06",
+  "total_revenue": 1265793.04,
+  "categories": {
+    "Beverages": {
+      "revenue": 267868.179744,
+      "products": 12,
+      "order_lines": 404,
+      "orders": 354,
+      "share_pct": 21.162084,
+      "share_P1_pct": 23.346311,
+      "share_P2_pct": 19.893556,
+      "share_change_pp": -3.452755
+    },
+    "Dairy Products": {
+      "revenue": 234507.284742,
+      "products": 10,
+      "order_lines": 366,
+      "orders": 303,
+      "share_pct": 18.526511,
+      "share_P1_pct": 17.999576,
+      "share_P2_pct": 19.175717,
+      "share_change_pp": 1.17614
+    },
+    "Confections": {
+      "revenue": 167357.224843,
+      "products": 13,
+      "order_lines": 334,
+      "orders": 295,
+      "share_pct": 13.221531,
+      "share_P1_pct": 15.05579,
+      "share_P2_pct": 12.185355,
+      "share_change_pp": -2.870434
+    },
+    "Meat/Poultry": {
+      "revenue": 163022.359392,
+      "products": 6,
+      "order_lines": 173,
+      "orders": 161,
+      "share_pct": 12.879069,
+      "share_P1_pct": 12.406566,
+      "share_P2_pct": 12.981764,
+      "share_change_pp": 0.575198
+    },
+    "Seafood": {
+      "revenue": 131261.737345,
+      "products": 12,
+      "order_lines": 330,
+      "orders": 291,
+      "share_pct": 10.369921,
+      "share_P1_pct": 8.112305,
+      "share_P2_pct": 11.749065,
+      "share_change_pp": 3.636759
+    },
+    "Condiments": {
+      "revenue": 106047.084879,
+      "products": 12,
+      "order_lines": 216,
+      "orders": 193,
+      "share_pct": 8.377917,
+      "share_P1_pct": 9.250897,
+      "share_P2_pct": 7.961667,
+      "share_change_pp": -1.28923
+    },
+    "Produce": {
+      "revenue": 99984.579916,
+      "products": 5,
+      "order_lines": 136,
+      "orders": 129,
+      "share_pct": 7.898967,
+      "share_P1_pct": 7.047985,
+      "share_P2_pct": 8.42364,
+      "share_change_pp": 1.375655
+    },
+    "Grains/Cereals": {
+      "revenue": 95744.587428,
+      "products": 7,
+      "order_lines": 196,
+      "orders": 182,
+      "share_pct": 7.564,
+      "share_P1_pct": 6.78057,
+      "share_P2_pct": 7.629237,
+      "share_change_pp": 0.848667
+    }
+  },
+  "top3_category_share_pct": 52.910126,
+  "customers_with_orders": 89,
+  "customers_without_orders": 2,
+  "top_n": 10,
+  "top_n_share_pct": 45.042517,
+  "top_pct": 20,
+  "top20pct_n": 18,
+  "top20pct_share_pct": 60.057049,
+  "customers_for_50pct": 13,
+  "customers_for_80pct": 34,
+  "top_customer": {
+    "name": "QUICK-Stop",
+    "country": "Germany",
+    "share_pct": 8.712112
+  },
+  "top10_customers": [
+    {
+      "rank": 1,
+      "CompanyName": "QUICK-Stop",
+      "Country": "Germany",
+      "revenue": 110277.304884,
+      "orders": 28,
+      "share_pct": 8.712112,
+      "first_order": "1996-08-05"
+    },
+    {
+      "rank": 2,
+      "CompanyName": "Ernst Handel",
+      "Country": "Austria",
+      "revenue": 104874.978354,
+      "orders": 30,
+      "share_pct": 8.285318,
+      "first_order": "1996-07-17"
+    },
+    {
+      "rank": 3,
+      "CompanyName": "Save-a-lot Markets",
+      "Country": "USA",
+      "revenue": 104361.949868,
+      "orders": 31,
+      "share_pct": 8.244788,
+      "first_order": "1996-10-08"
+    },
+    {
+      "rank": 4,
+      "CompanyName": "Rattlesnake Canyon Grocery",
+      "Country": "USA",
+      "revenue": 51097.800488,
+      "orders": 18,
+      "share_pct": 4.036821,
+      "first_order": "1996-07-22"
+    },
+    {
+      "rank": 5,
+      "CompanyName": "Hungry Owl All-Night Grocers",
+      "Country": "Ireland",
+      "revenue": 49979.904946,
+      "orders": 19,
+      "share_pct": 3.948505,
+      "first_order": "1996-09-05"
+    },
+    {
+      "rank": 6,
+      "CompanyName": "Hanari Carnes",
+      "Country": "Brazil",
+      "revenue": 32841.369978,
+      "orders": 14,
+      "share_pct": 2.594529,
+      "first_order": "1996-07-08"
+    },
+    {
+      "rank": 7,
+      "CompanyName": "Königlich Essen",
+      "Country": "Germany",
+      "revenue": 30908.383969,
+      "orders": 14,
+      "share_pct": 2.44182,
+      "first_order": "1996-10-07"
+    },
+    {
+      "rank": 8,
+      "CompanyName": "Folk och fä HB",
+      "Country": "Sweden",
+      "revenue": 29567.562475,
+      "orders": 19,
+      "share_pct": 2.335892,
+      "first_order": "1996-07-24"
+    },
+    {
+      "rank": 9,
+      "CompanyName": "Mère Paillarde",
+      "Country": "Canada",
+      "revenue": 28872.18995,
+      "orders": 13,
+      "share_pct": 2.280957,
+      "first_order": "1996-10-17"
+    },
+    {
+      "rank": 10,
+      "CompanyName": "White Clover Markets",
+      "Country": "USA",
+      "revenue": 27363.604972,
+      "orders": 14,
+      "share_pct": 2.161776,
+      "first_order": "1996-07-31"
+    }
+  ],
+  "bottom_half_n": 44,
+  "bottom_half_share_pct": 11.546086,
+  "customers_first_order_after_p1": 7,
+  "figures": [
+    "docs/figures/q2_category_revenue.png",
+    "docs/figures/q2_customer_pareto.png"
+  ]
+}

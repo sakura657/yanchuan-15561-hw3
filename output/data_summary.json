@@ -1,0 +1,14 @@
+{
+  "orders": 830,
+  "order_lines": 2155,
+  "customers": 91,
+  "customer_countries": 21,
+  "products": 77,
+  "categories": 8,
+  "shippers": 3,
+  "first_order": "1996-07-04",
+  "last_order": "1998-05-06",
+  "unshipped_orders": 21,
+  "lines_price_differs_from_list": 658,
+  "orders_customer_country_differs_from_ship_country": 4
+}

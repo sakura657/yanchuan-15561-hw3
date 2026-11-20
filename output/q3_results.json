@@ -1,0 +1,123 @@
+{
+  "shipped_orders": 809,
+  "open_orders": 21,
+  "open_order_dates": [
+    "1998-04-08",
+    "1998-05-06"
+  ],
+  "open_overdue_at_data_end": 0,
+  "overall": {
+    "median_days": 7.0,
+    "mean_days": 8.5,
+    "p90_days": 18.0,
+    "late": 37,
+    "late_pct": 4.573548,
+    "avg_days_late": 6.4
+  },
+  "shippers": {
+    "Speedy Express": {
+      "orders": 249,
+      "shipped": 245,
+      "open": 4,
+      "median_days": 7.0,
+      "median_ci_lo": 7.0,
+      "median_ci_hi": 7.0,
+      "mean_days": 8.571429,
+      "p90_days": 18.0,
+      "slow_pct": 12.244898,
+      "slow_ci_lo": 8.713322,
+      "slow_ci_hi": 16.942196,
+      "late": 12,
+      "late_pct": 4.897959,
+      "late_ci_lo": 2.823702,
+      "late_ci_hi": 8.364781,
+      "avg_days_late": 8.083333,
+      "lead14_orders": 20,
+      "lead28_orders": 204,
+      "lead42_orders": 21,
+      "late_pct_28day": 3.431373,
+      "late_28day": 7,
+      "avg_freight": 65.449633
+    },
+    "United Package": {
+      "orders": 326,
+      "shipped": 315,
+      "open": 11,
+      "median_days": 7.0,
+      "median_ci_lo": 7.0,
+      "median_ci_hi": 8.0,
+      "mean_days": 9.234921,
+      "p90_days": 21.6,
+      "slow_pct": 14.920635,
+      "slow_ci_lo": 11.409641,
+      "slow_ci_hi": 19.276944,
+      "late": 16,
+      "late_pct": 5.079365,
+      "late_ci_lo": 3.150372,
+      "late_ci_hi": 8.090821,
+      "avg_days_late": 5.5625,
+      "lead14_orders": 24,
+      "lead28_orders": 267,
+      "lead42_orders": 24,
+      "late_pct_28day": 4.868914,
+      "late_28day": 13,
+      "avg_freight": 87.481778
+    },
+    "Federal Shipping": {
+      "orders": 255,
+      "shipped": 249,
+      "open": 6,
+      "median_days": 6.0,
+      "median_ci_lo": 6.0,
+      "median_ci_hi": 7.0,
+      "mean_days": 7.473896,
+      "p90_days": 12.0,
+      "slow_pct": 7.630522,
+      "slow_ci_lo": 4.939103,
+      "slow_ci_hi": 11.60944,
+      "late": 9,
+      "late_pct": 3.614458,
+      "late_ci_lo": 1.913004,
+      "late_ci_hi": 6.725448,
+      "avg_days_late": 5.555556,
+      "lead14_orders": 24,
+      "lead28_orders": 211,
+      "lead42_orders": 14,
+      "late_pct_28day": 2.369668,
+      "late_28day": 5,
+      "avg_freight": 81.779518
+    }
+  },
+  "lead_time": [
+    {
+      "lead_days": 14,
+      "shipped": 68,
+      "late": 12,
+      "median_days": 7.5,
+      "late_pct": 17.647059
+    },
+    {
+      "lead_days": 28,
+      "shipped": 682,
+      "late": 25,
+      "median_days": 7.0,
+      "late_pct": 3.665689
+    },
+    {
+      "lead_days": 42,
+      "shipped": 59,
+      "late": 0,
+      "median_days": 7.0,
+      "late_pct": 0.0
+    }
+  ],
+  "late_rate_cis_all_overlap": true,
+  "slow_threshold_days": 14,
+  "bootstrap": {
+    "n": 10000,
+    "seed": 561
+  },
+  "figures": [
+    "docs/figures/q3_days_to_ship_box.png"
+  ]
+}
