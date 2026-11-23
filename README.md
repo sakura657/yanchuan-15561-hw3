@@ -92,7 +92,8 @@ three customers.
 | **Q1** Region table | `src/q1_markets.py` → `market_table` | `q1_results.json` → `regions` (also `output/q1_regions.csv`) | `q1_section` |
 | **Q1** Figure: country share change | `src/q1_markets.py` → `chart_countries` | `docs/figures/q1_country_share_change.png` | `q1_section` |
 | **Q1** Country table | `src/q1_markets.py` → `market_table` | `q1_results.json` → `countries_drilldown` (also `output/q1_countries_drilldown.csv`) | `q1_section` |
-| **Q1** Finding and implication: shares, share changes, growth rates, countries that gained or lost | `src/q1_markets.py` | `q1_results.json` → `regions`, `countries_drilldown`, `p1`, `p2` | `q1_facts`, `q1_section` |
+| **Q1** All-countries table (all 21, incl. those below the threshold) | `src/q1_markets.py` → `market_table` | `q1_results.json` → `countries_all` (also `output/q1_countries_all.csv`) | `q1_section` |
+| **Q1** Finding and implication: shares, share changes, growth rates, the countries that gained or lost the most share, every country whose revenue fell | `src/q1_markets.py` | `q1_results.json` → `regions`, `countries_drilldown`, `countries_all`, `p1`, `p2` | `q1_facts`, `q1_section` |
 | **Q1** Caveat: effect of the 4 ship-to-country orders | `src/q1_markets.py` → `quirk_effect` | `q1_results.json` → `quirk_effect` | `q1_section` |
 | **Q1** Caveat: region groupings | `src/common.py` → `REGION_MAP` | `q1_results.json` → `region_map` | `q1_section` |
 | **Q2** Approach: window, customer count, top-N and top-% definitions | `src/q2_concentration.py` | `q2_results.json` → `window`, `customers_with_orders`, `top_n`, `top_pct`, `top20pct_n` | `q2_section` |

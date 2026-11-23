@@ -228,22 +228,29 @@ def q1_facts(q1):
         q1 (dict): Contents of ``q1_results.json``.
 
     Returns:
-        dict: Region and country tables, the top and bottom region and
-        country by share change, the largest region by P2 share, and
-        the countries that gained share, lost revenue, or have at most
-        ``SMALL_MARKET_MAX`` customers.
+        dict: Region, drill-down and all-country tables, the top and
+        bottom region and country (of all countries) by share change,
+        the largest region by P2 share, the drill-down countries that
+        gained share or have at most ``SMALL_MARKET_MAX`` customers,
+        every country whose revenue fell (largest drop first), and
+        which of those are below the drill-down threshold.
     """
     regions = q1["regions"]
     countries = q1["countries_drilldown"]
+    all_countries = q1["countries_all"]
     by_change = sorted(regions, key=lambda r: regions[r]["share_change_pp"])
     c_by_change = sorted(countries, key=lambda c: countries[c]["share_change_pp"])
+    all_by_change = sorted(all_countries, key=lambda c: all_countries[c]["share_change_pp"])
+    declined = sorted((c for c in all_countries if all_countries[c]["revenue_growth_pct"] < 0),
+                      key=lambda c: all_countries[c]["revenue_growth_pct"])
     return {
-        "regions": regions, "countries": countries,
+        "regions": regions, "countries": countries, "all_countries": all_countries,
         "reg_gainer": by_change[-1], "reg_loser": by_change[0],
         "largest": max(regions, key=lambda r: regions[r]["share_P2"]),
-        "cty_gainer": c_by_change[-1], "cty_loser": c_by_change[0],
+        "cty_gainer": all_by_change[-1], "cty_loser": all_by_change[0],
         "cty_gained": [c for c in reversed(c_by_change) if countries[c]["share_change_pp"] > 0],
-        "cty_declined_rev": [c for c in c_by_change if countries[c]["revenue_growth_pct"] < 0],
+        "cty_declined_rev": declined,
+        "cty_declined_below_threshold": [c for c in declined if c not in countries],
         "cty_small": [c for c in c_by_change if countries[c]["customers_total"] <= SMALL_MARKET_MAX],
     }
 
@@ -262,7 +269,7 @@ def q1_section(q1, f, ds):
     R, C = f["regions"], f["countries"]
     p1, p2 = q1["p1"], q1["p2"]
     g, l = R[f["reg_gainer"]], R[f["reg_loser"]]
-    cg, cl = C[f["cty_gainer"]], C[f["cty_loser"]]
+    cg, cl = f["all_countries"][f["cty_gainer"]], f["all_countries"][f["cty_loser"]]
     k = q1["country_min_orders_per_half"]
     loser_desc = (f"is still the largest region at {pct(l['share_P2'])} of revenue but"
                   if f["reg_loser"] == f["largest"] else f"({pct(l['share_P2'])} of revenue)")
@@ -284,8 +291,8 @@ calendar years can't be compared. Instead I split the data into two equal halves
 <p>Because the whole company grew {pct(q1['company_revenue_growth_pct'], 0)} between the
 halves, almost every market grew in dollars. So the headline measure is each market's
 <strong>change in share of company revenue</strong> (in percentage points, pp). Dollar growth is
-shown alongside. Countries are shown individually only if they had at least {k} orders in each
-half.</p>"""
+shown alongside. The country chart includes only countries with at least {k} orders in each
+half; the full table below it lists all {len(f['all_countries'])} countries.</p>"""
 
     reg_rows = [
         [escape(r), num(v["customers_total"]), num(v["orders_P1"]), num(v["orders_P2"]),
@@ -296,6 +303,19 @@ half.</p>"""
         [escape(c), num(v["customers_total"]), num(v["orders_P1"]), num(v["orders_P2"]),
          signed_pct(v["revenue_growth_pct"]), pp(v["share_change_pp"])]
         for c, v in sorted(C.items(), key=lambda kv: -kv[1]["share_change_pp"])]
+    all_rows = [
+        [escape(c), num(v["customers_total"]), num(v["orders_P1"]), num(v["orders_P2"]),
+         money(v["revenue_P1"]), money(v["revenue_P2"]), signed_pct(v["revenue_growth_pct"]),
+         pp(v["share_change_pp"]), "yes" if c in C else "no"]
+        for c, v in sorted(f["all_countries"].items(), key=lambda kv: kv[1]["revenue_growth_pct"])]
+    declined = f["cty_declined_rev"]
+    declined_text = join_names(
+        f"{c} ({signed_pct(f['all_countries'][c]['revenue_growth_pct'])})" for c in declined)
+    small_declined = f["cty_declined_below_threshold"]
+    small_note = (
+        f" {join_names(small_declined)} had fewer than {k} orders in at least one half, so "
+        f"{'its drop rests' if len(small_declined) == 1 else 'their drops rest'} on very few "
+        f"orders." if small_declined else "")
     region_list = "; ".join(
         f"{escape(r)}: {join_names(sorted(c for c, rr in q1['region_map'].items() if rr == r))}"
         for r in sorted(R))
@@ -312,7 +332,12 @@ half.</p>"""
                  "The number in brackets is how many customers the country has.")
         + f"<details><summary>Country table</summary>"
         + table(["Country", "Customers", "Orders P1", "Orders P2", "Revenue growth",
-                 "Share change"], cty_rows) + "</details>")
+                 "Share change"], cty_rows) + "</details>"
+        + f"<details><summary>All {len(f['all_countries'])} countries, "
+          f"sorted by revenue growth</summary>"
+        + table(["Country", "Customers", "Orders P1", "Orders P2", "Revenue P1", "Revenue P2",
+                 "Growth", "Share change", f"In chart (≥{k} orders each half)"], all_rows)
+        + "</details>")
 
     finding = f"""<p>Revenue grew {pct(q1['company_revenue_growth_pct'], 0)} from P1 to P2
 ({money(p1['revenue'])} to {money(p2['revenue'])}). Measured by share,
@@ -322,13 +347,14 @@ half.</p>"""
 {pp(-l['share_change_pp']).replace('+', '')}.</p>
 <p>By country, {country(f['cty_gainer'])} gained the most share ({pp(cg['share_change_pp'])}) and
 {escape(f['cty_loser'])} lost the most ({pp(cl['share_change_pp'])}, with revenue up only
-{pct(cl['revenue_growth_pct'], 0)}). Only {join_names(f['cty_declined_rev'])} had lower
-revenue in P2 than in P1.</p>"""
+{pct(cl['revenue_growth_pct'], 0)}). Across all {len(f['all_countries'])} countries,
+{len(declined)} had lower revenue in P2 than in P1: {declined_text}.{small_note}</p>"""
 
     implication = f"""<p>{escape(f['reg_gainer'])}, and {country(f['cty_gainer'])} in particular, is
-where demand is rising fastest, so it is the strongest case for extra sales capacity. The
-markets gaining share are {join_names(f['cty_gained'])}. {escape(f['cty_loser'])} and the
-countries where revenue fell ({join_names(f['cty_declined_rev'])}) need a customer-by-customer
+where demand is rising fastest, so it is the strongest case for extra sales capacity. Among the
+countries with enough orders to show in the chart, those gaining share are
+{join_names(f['cty_gained'])}. {escape(f['cty_loser'])} and the
+countries where revenue fell ({join_names(declined)}) need a customer-by-customer
 review to find out who is buying less, and why, before deciding whether to rebuild or cut
 effort there.</p>"""
 

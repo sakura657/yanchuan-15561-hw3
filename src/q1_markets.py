@@ -214,6 +214,7 @@ def main():
         "regions": rnd(reg, "Region"),
         "country_min_orders_per_half": k,
         "countries_drilldown": rnd(cty, "Country"),
+        "countries_all": rnd(cty_all, "Country"),
         "quirk_effect": quirk_effect(df),
         "figures": [str(f.relative_to(c.ROOT)) for f in figs],
     }
